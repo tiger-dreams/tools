@@ -76,6 +76,7 @@
 
     <script>
         const MAX_WIDTH = 1400;
+        const MAX_HEIGHT = 900;
         const imageLoader = document.getElementById('imageLoader');
         const clipboardButton = document.getElementById('clipboardButton');
         const saveButton = document.getElementById('saveButton');
@@ -130,7 +131,13 @@
                     width = MAX_WIDTH;
                     height = Math.floor(height * scaleFactor);
                 }
-        
+
+                if (height > MAX_HEIGHT) {
+                    const scaleFactor = MAX_HEIGHT / height;
+                    height = MAX_HEIGHT;
+                    width = Math.floor(width * scaleFactor);
+                }
+
                 canvas.width = width;
                 canvas.height = height;
                 ctx.drawImage(currentImage, 0, 0, width, height);
