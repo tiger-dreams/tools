@@ -65,6 +65,7 @@
             <option value="rectangle" data-lang-key="rectangle">사각형</option>
             <option value="circle" data-lang-key="circle">원</option>
         </select>
+        <button id="resizeHeight900" class="btn btn-primary">높이 900px로 리사이즈</button>
     </div>
     <div id="imageContainer">
         <canvas id="imageCanvas"></canvas>
@@ -76,7 +77,6 @@
 
     <script>
         const MAX_WIDTH = 1400;
-        const MAX_HEIGHT = 900;
         const imageLoader = document.getElementById('imageLoader');
         const clipboardButton = document.getElementById('clipboardButton');
         const saveButton = document.getElementById('saveButton');
@@ -132,12 +132,6 @@
                     height = Math.floor(height * scaleFactor);
                 }
 
-                if (height > MAX_HEIGHT) {
-                    const scaleFactor = MAX_HEIGHT / height;
-                    height = MAX_HEIGHT;
-                    width = Math.floor(width * scaleFactor);
-                }
-
                 canvas.width = width;
                 canvas.height = height;
                 ctx.drawImage(currentImage, 0, 0, width, height);
@@ -153,6 +147,28 @@
             }
             currentImage.src = url;
         }
+
+        document.getElementById('resizeHeight900').addEventListener('click', function() {
+        const img = document.querySelector('#preview-image'); // 이미지 선택자는 실제 사용하시는 이미지 ID로 변경해주세요
+        if (!img) return;
+
+        const originalWidth = img.naturalWidth;
+        const originalHeight = img.naturalHeight;
+        
+        // 높이를 900으로 맞추고 너비는 비율에 맞게 계산
+        const TARGET_HEIGHT = 900;
+        const scaleFactor = TARGET_HEIGHT / originalHeight;
+        const newWidth = Math.floor(originalWidth * scaleFactor);
+        
+        img.style.height = `${TARGET_HEIGHT}px`;
+        img.style.width = `${newWidth}px`;
+        
+        // 만약 캔버스나 다른 처리가 필요한 경우를 위해 값을 반환
+        return {
+            width: newWidth,
+            height: TARGET_HEIGHT
+        };
+    });
 
         function cacheImageToLocalStorage(img, url) {
             const tempCanvas = document.createElement('canvas');
